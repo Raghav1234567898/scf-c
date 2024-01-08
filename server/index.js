@@ -6,17 +6,20 @@ import userRoutes from "./routes/users.js";
 import questionRoutes from "./routes/Questions.js";
 import answerRoutes from "./routes/Answers.js";
 import connectDB from "./connectMongoDb.js";
+const path = require('path');
 
 dotenv.config();
 connectDB();
 const app = express();
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
-app.use('/',(req, res) => { 
-      res.send("This is a stack overflow clone API")
- })
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 app.use("/user", userRoutes);
 app.use("/questions", questionRoutes);
